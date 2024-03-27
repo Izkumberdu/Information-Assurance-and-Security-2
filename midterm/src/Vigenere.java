@@ -18,6 +18,7 @@ public class Vigenere {
                 break;
             case 2:
                 decrypt(scan);
+                Menu(scan);
                 break;
             case 3:
                 break;
