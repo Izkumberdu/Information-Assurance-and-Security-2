@@ -18,7 +18,7 @@ public class RailFence {
         }
     }
 
-    static String encryptProcess(String text, int key) {
+    public static String encryptProcess(String text, int key) {
         String encryptMsg = "";
         boolean dir = false;
         int row = key;
@@ -54,7 +54,7 @@ public class RailFence {
         return encryptMsg;
     }
 
-    static String decryptProcess(String text, int key) {
+    public static String decryptProcess(String text, int key) {
         String decryptMsg = "";
         boolean dir = false;
         int row = key;

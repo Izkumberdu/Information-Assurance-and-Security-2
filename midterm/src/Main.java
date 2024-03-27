@@ -3,25 +3,32 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) throws Exception {
         Scanner scan = new Scanner(System.in);
-        System.out.println("Menu: \n1 -- Railfence\n2 -- Vigenere");
-        System.out.print("Input:");
-        int input = scan.nextInt();
+        String res;
+        String input;
+        do {
+            System.out.println("\nMenu: \nA -- Railfence\nB -- Vigenere");
+            System.out.print("Input: ");
+            input = scan.nextLine();
 
-        switch (input) {
-            case 1:
-                RailFence railFence = new RailFence();
-                RailFence.main(args);
-                main(args);
-                break;
+            switch (input) {
+                case "a":
+                    RailFence railFence = new RailFence();
+                    railFence.main(args);
+                    // main(args);
+                    break;
 
-            case 2:
-                Vigenere vigenere = new Vigenere();
-                vigenere.main(args);
-                main(args);
-                break;
-            default:
-                break;
-        }
+                case "b":
+                    Vigenere vigenere = new Vigenere();
+                    vigenere.main(args);
+                    // main(args);
+                    break;
+                default:
+                    System.out.print("Invalid input.");
+                    break;
+            }
+            System.out.print("\n\nDo you want to proceed to menu? [y/n] ");
+            res = scan.nextLine();
+        } while (res.equalsIgnoreCase("y"));
     }
 
 }
