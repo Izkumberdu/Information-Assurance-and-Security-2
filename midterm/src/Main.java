@@ -20,7 +20,7 @@ public class Main {
                 main(args);
                 break;
             default:
-                break;
+                return;
         }
     }
 
