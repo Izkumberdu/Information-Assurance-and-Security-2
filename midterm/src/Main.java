@@ -1,42 +1,42 @@
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         Scanner scan = new Scanner(System.in);
 
         while (true) {
-            System.out.println("Menu: \n1 -- Railfence\n2 -- Vigenere\n3 -- DES\n4 -- Exit");
+            System.out.println("Menu: \n1 -- Railfence\n2 -- Vigenere\n3 -- DES\n4 -- RC4\n5 -- Exit");
             System.out.print("Input: ");
-
+            int input = 0;
             if (scan.hasNextInt()) {
-                int input = scan.nextInt();
-
-                switch (input) {
-                    case 1:
-                        RailFence railFence = new RailFence();
-                        railFence.main(args);
-                        break;
-                    case 2:
-                        Vigenere vigenere = new Vigenere();
-                        vigenere.main(args);
-                        break;
-
-                    case 3:
-                        DES des = new DES();
-                        des.main(args);
-                        break;
-                    case 4:
-                        return;
-                    default:
-                        System.out.println("Invalid input. Please try again.");
-                }
+                input = scan.nextInt();
+                scan.nextLine(); // consume the newline
             } else {
-                scan.nextLine();
-                System.out.println("Invalid input. Please enter a number (1-3).");
+                scan.nextLine(); // consume the non-integer input
+                System.out.println("Invalid input. Please enter a number (1-5).");
+                continue; // skip to the next iteration
             }
-            scan.close();
-        }
-        
-    }
 
+            switch (input) {
+                case 1:
+                    RailFence.main(args);
+                    break;
+                case 2:
+                    Vigenere.main(args);
+                    break;
+                case 3:
+                    DES.main(args);
+                    break;
+                case 4:
+                    RC4.main(args);
+                    break;
+                case 5:
+                    System.out.println("Exiting...");
+                    scan.close();
+                    return;
+                default:
+                    System.out.println("Invalid input. Please try again.");
+            }
+        }
+    }
 }
