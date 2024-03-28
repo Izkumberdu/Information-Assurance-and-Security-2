@@ -34,6 +34,9 @@ public class Main {
                 scan.nextLine();
                 System.out.println("Invalid input. Please enter a number (1-3).");
             }
+            scan.close();
         }
+        
     }
+
 }

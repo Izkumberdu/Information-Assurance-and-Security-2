@@ -258,6 +258,4 @@ public class DES {
         String combinedMessage = right + left;
         return finalPermutation(combinedMessage);
     }
-
-    // Complete the code by implementing the remaining methods and defining all the DES tables
 }
