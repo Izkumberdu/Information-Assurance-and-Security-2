@@ -2,8 +2,6 @@ import java.util.Scanner;
 
 public class DES {
 
-    // DES Tables not shown in this snippet for brevity
-    // Place PC1, PC2, IP, FP, Expansion Table, S-boxes, P-box, and shifts arrays here
     private static int[] shifts = {
         1, 1, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 1 // Shift schedule for the 16 rounds
     };
@@ -88,7 +86,7 @@ public class DES {
         System.out.println("3. Exit");
         System.out.print("Enter your choice (1, 2, or 3): ");
         int choice = scanner.nextInt();
-        scanner.nextLine(); // Consume newline
+        scanner.nextLine(); 
         
         switch (choice) {
             case 1:
@@ -116,7 +114,6 @@ public class DES {
         scanner.close();
     }
 
-    // Add other private static methods for DES here (hexToBinary, binaryToHex, permute, etc.)
     private static String hexToBinary(String hex) {
         String binary = "";
         for(int i = 0; i < hex.length(); i++) {
@@ -127,7 +124,7 @@ public class DES {
             }
             binary += bin;
         }
-        // Ensure the binary string is 64 bits long
+
         while (binary.length() < 64) {
             binary = "0" + binary;
         }
@@ -184,21 +181,17 @@ public class DES {
     private static String[] generateSubkeys(String key) {
         String keyBinary = hexToBinary(key);
         
-        // Apply PC-1 to get the 56-bit permuted key
         String permutedKey = permute(keyBinary, PC1);
         
-        // Split the permuted key into two 28-bit halves
         String left = permutedKey.substring(0, 28);
         String right = permutedKey.substring(28, 56);
         
         String[] subkeys = new String[16];
         
-        // Generate 16 subkeys
         for (int i = 0; i < 16; i++) {
             left = rotateLeft(left, shifts[i]);
             right = rotateLeft(right, shifts[i]);
             
-            // Combine the halves and apply PC-2 to get the 48-bit subkey
             String combinedKey = left + right;
             subkeys[i] = permute(combinedKey, PC2);
         }
@@ -250,11 +243,10 @@ public class DES {
             String permuted = permute(substituted, P);
             String newRight = xor(left, permuted);
             
-            left = right; // right becomes the new left
-            right = newRight; // result becomes the new right
+            left = right; 
+            right = newRight; 
         }
         
-        // In the final step, the halves are not swapped
         String combinedMessage = right + left;
         return finalPermutation(combinedMessage);
     }
