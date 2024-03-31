@@ -32,6 +32,8 @@ public class Vigenere {
     private static void Encrypt(Scanner scan) {
         System.out.print("Input Text to Encrypt: ");
         String text = scan.next().toUpperCase();
+        text.toCharArray();
+        System.out.println(text);
 
         System.out.print("Input key of the Encryption: ");
         String key = scan.next();
@@ -77,6 +79,12 @@ public class Vigenere {
         }
 
         System.out.println("Encrypted Message: " + decryptedMessage);
+    }
+
+    private static String removedWhiteSpace(String text) {
+        String editedText = text.replaceAll("\\s", "");
+        System.out.println(editedText);
+        return editedText;
     }
 
     private static String KeyRepeat(String key, String text) {

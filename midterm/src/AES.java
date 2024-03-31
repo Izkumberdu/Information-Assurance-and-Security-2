@@ -14,12 +14,15 @@ public class AES {
 
         switch (input) {
             case 1:
-
+                Encrypt(scan);
+                menu(scan);
                 break;
             case 2:
-
+                Decrypt(scan);
+                menu(scan);
                 break;
             case 3:
+
                 break;
 
             default:
@@ -28,7 +31,13 @@ public class AES {
         }
     }
 
-    public static void Encrypt() {
+    public static void Encrypt(Scanner scan) {
+        System.out.println("Enter Text To encrypt:");
+        String text = scan.next();
+
+    }
+
+    public static void Decrypt(Scanner scan) {
 
     }
 }
