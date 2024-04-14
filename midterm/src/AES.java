@@ -82,7 +82,7 @@ public class AES {
 
     public static void encryptMenu(Scanner scan) {
         System.out.println("Enter Text To decrypt:");
-        String text = "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do ";
+        String text = "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do";
         // String text = scan.next();
         System.out.println("Enter Decryption Key (16 bytes in hexadecimal format):");
         // String key = scan.next();
@@ -103,9 +103,31 @@ public class AES {
         menu(scan);
     }
 
-    private static String encryptECB(String input, String key) {
+    private static String encryptECB(String text, String key) {
 
-        return input;
+        String convertedTextToHex = convertToHex(text);
+        System.out.println(convertedTextToHex);
+        return text;
+    }
+
+    private static String convertToHex(String text) {
+        // Convert text to byte array
+        byte[] bytes = text.getBytes();
+        StringBuilder hexString = new StringBuilder();
+        // Convert each byte to hexadecimal and append to hexString
+        for (int i = 0; i < bytes.length; i++) {
+            String hex = Integer.toHexString(bytes[i] & 0xff);
+            if (hex.length() == 1) {
+                hexString.append('0');
+            }
+            hexString.append(hex);
+            // Insert space after every 16 characters
+            if ((i + 1) % 16 == 0 && (i + 1) != bytes.length) {
+                hexString.append(' ');
+            }
+        }
+
+        return hexString.toString();
     }
 
     private static String decryptECB(String input, String key) {
