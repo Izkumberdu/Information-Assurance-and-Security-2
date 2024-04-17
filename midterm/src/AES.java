@@ -2,6 +2,8 @@ import java.util.Scanner;
 
 public class AES {
         private static final int BLOCK_SIZE = 16;
+        private static final int MAX_COL_SIZE = 4;
+        private static final int MAX_ROW_SIZE = 4;
 
         private static final byte[][] S_BOX = {
                         { (byte) 0x63, (byte) 0x7c, (byte) 0x77, (byte) 0x7b, (byte) 0xf2, (byte) 0x6b, (byte) 0x6f,
@@ -136,31 +138,33 @@ public class AES {
         }
 
         private static String encryptECB(String text, String key) {
-                char state[][];
 
-                String convertedTextToHex = convertToHex(text);
-                System.out.println(convertedTextToHex);
+                String[][] initialState = initialState(text);
+                System.out.println(initialState[2][2]);
+
                 return text;
         }
 
-        private static String convertToHex(String text) {
-                // Convert text to byte array
+        private static String[][] initialState(String text) {
                 byte[] bytes = text.getBytes();
-                StringBuilder hexString = new StringBuilder();
-                // Convert each byte to hexadecimal and append to hexString
-                for (int i = 0; i < bytes.length; i++) {
-                        String hex = Integer.toHexString(bytes[i] & 0xff);
-                        if (hex.length() == 1) {
-                                hexString.append('0');
-                        }
-                        hexString.append(hex);
-                        // Insert space after every 16 characters
-                        if ((i + 1) % 16 == 0 && (i + 1) != bytes.length) {
-                                hexString.append(' ');
+                String[][] hexArray = new String[MAX_ROW_SIZE][MAX_COL_SIZE];
+                int byteIndex = 0;
+
+                for (int col = 0; col < MAX_COL_SIZE; col++) {
+                        for (int row = 0; row < MAX_ROW_SIZE; row++) {
+                                if (byteIndex >= bytes.length) {
+                                        hexArray[row][col] = "00";
+                                } else {
+                                        String hex = Integer.toHexString(bytes[byteIndex] & 0xff);
+                                        if (hex.length() == 1) {
+                                                hex = "0" + hex;
+                                        }
+                                        hexArray[row][col] = hex;
+                                        byteIndex++;
+                                }
                         }
                 }
-
-                return hexString.toString();
+                return hexArray;
         }
 
         private static String decryptECB(String input, String key) {
