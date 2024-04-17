@@ -140,8 +140,9 @@ public class AES {
         private static String encryptECB(String text, String key) {
 
                 String[][] initialState = initialState(text);
-                System.out.println(initialState[2][2]);
-
+                String[][] initialStateKey = convertKeyToState(key);
+                System.out.println(initialState[0][0]);
+                System.out.println(initialStateKey[0][1]);
                 return text;
         }
 
@@ -165,6 +166,32 @@ public class AES {
                         }
                 }
                 return hexArray;
+        }
+
+        private static String[][] convertKeyToState(String key) {
+
+                String[][] keyState = new String[4][4];
+
+                byte[] keyBytes = new byte[key.length() / 2];
+                for (int i = 0; i < key.length(); i += 2) {
+                        keyBytes[i / 2] = (byte) ((Character.digit(key.charAt(i), 16) << 4)
+                                        + Character.digit(key.charAt(i + 1), 16));
+                }
+
+                int byteIndex = 0;
+                for (int col = 0; col < 4; col++) {
+                        for (int row = 0; row < 4; row++) {
+
+                                String hex = Integer.toHexString(keyBytes[byteIndex] & 0xFF);
+
+                                if (hex.length() == 1) {
+                                        hex = "0" + hex;
+                                }
+                                keyState[row][col] = hex;
+                                byteIndex++;
+                        }
+                }
+                return keyState;
         }
 
         private static String decryptECB(String input, String key) {
