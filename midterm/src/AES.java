@@ -141,9 +141,27 @@ public class AES {
 
                 String[][] initialState = initialState(text);
                 String[][] initialStateKey = convertKeyToState(key);
+
+                String[][] state = addRoundKey(initialState, initialStateKey);
                 System.out.println(initialState[0][0]);
                 System.out.println(initialStateKey[0][1]);
+                System.out.println(state[0][0]);
                 return text;
+        }
+
+        private static String[][] addRoundKey(String[][] initialState, String[][] keyState) {
+                String[][] newState = new String[4][4];
+
+                for (int col = 0; col < 4; col++) {
+                        for (int row = 0; row < 4; row++) {
+                                int initialStateValue = Integer.parseInt(initialState[row][col], 16);
+                                int keyStateValue = Integer.parseInt(keyState[row][col], 16);
+                                int result = initialStateValue ^ keyStateValue;
+                                newState[row][col] = String.format("%02x", result);
+                        }
+                }
+
+                return newState;
         }
 
         private static String[][] initialState(String text) {
