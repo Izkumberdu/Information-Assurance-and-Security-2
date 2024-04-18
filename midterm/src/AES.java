@@ -146,7 +146,48 @@ public class AES {
                 System.out.println(initialState[0][0]);
                 System.out.println(initialStateKey[0][1]);
                 System.out.println(state[0][0]);
+                state = subBytes(state);
+                System.out.println(state[0][2]);
+                state = shiftRows(state);
+                System.out.println(state[1][0]);
                 return text;
+        }
+
+        private static String[][] subBytes(String[][] state) {
+                String[][] subByte = new String[4][4];
+
+                for (int row = 0; row < 4; row++) {
+                        for (int col = 0; col < 4; col++) {
+                                String hexValue = state[row][col];
+                                int rowIndex = Integer.parseInt(hexValue.substring(0, 1), 16);
+                                int colIndex = Integer.parseInt(hexValue.substring(1), 16);
+                                subByte[row][col] = String.format("%02x", S_BOX[rowIndex][colIndex]);
+                        }
+                }
+
+                return subByte;
+        }
+
+        private static String[][] shiftRows(String[][] state) {
+                String[][] shiftedState = new String[4][4];
+
+                for (int col = 0; col < 4; col++) {
+                        shiftedState[0][col] = state[0][col];
+                }
+
+                for (int col = 0; col < 4; col++) {
+                        shiftedState[1][col] = state[1][(col + 1) % 4];
+                }
+
+                for (int col = 0; col < 4; col++) {
+                        shiftedState[2][col] = state[2][(col + 2) % 4];
+                }
+
+                for (int col = 0; col < 4; col++) {
+                        shiftedState[3][col] = state[3][(col + 3) % 4];
+                }
+
+                return shiftedState;
         }
 
         private static String[][] addRoundKey(String[][] initialState, String[][] keyState) {
