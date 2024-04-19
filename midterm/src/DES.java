@@ -3,7 +3,7 @@ import java.util.Scanner;
 public class DES {
 
     private static int[] shifts = {
-        1, 1, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 1 // Shift schedule for the 16 rounds
+        1, 1, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 1 
     };
 
     private static int[] PC1 = {
