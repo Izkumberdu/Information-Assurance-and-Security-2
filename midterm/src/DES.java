@@ -3,7 +3,7 @@ import java.util.Scanner;
 public class DES {
 
     private static int[] shifts = {
-        1, 1, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 1 // Shift schedule for the 16 rounds
+        1, 1, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 1 
     };
 
     private static int[] PC1 = {
@@ -141,7 +141,6 @@ public class DES {
     }
 
     private static String permute(String input, int[] permutationTable) {
-        // Assume that the input string is a binary string of 64 or 56 bits as necessary
         StringBuilder output = new StringBuilder();
         for (int i = 0; i < permutationTable.length; i++) {
             output.append(input.charAt(permutationTable[i] - 1));
