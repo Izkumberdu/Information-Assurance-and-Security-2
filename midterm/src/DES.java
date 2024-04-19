@@ -141,7 +141,6 @@ public class DES {
     }
 
     private static String permute(String input, int[] permutationTable) {
-        // Assume that the input string is a binary string of 64 or 56 bits as necessary
         StringBuilder output = new StringBuilder();
         for (int i = 0; i < permutationTable.length; i++) {
             output.append(input.charAt(permutationTable[i] - 1));
