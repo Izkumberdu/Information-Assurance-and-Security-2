@@ -5,7 +5,7 @@ public class Main {
         Scanner scan = new Scanner(System.in);
 
         while (true) {
-            System.out.println("Menu: \n1 -- Railfence\n2 -- Vigenere\n3 -- DES\n4 -- RC4\n5 -- Exit");
+            System.out.println("Menu: \n1 -- Railfence\n2 -- Vigenere\n3 -- DES\n4 -- RC4\n5 -- AES\n6 -- Exit");
             System.out.print("Input: ");
             int input = 0;
             if (scan.hasNextInt()) {
@@ -31,6 +31,8 @@ public class Main {
                     RC4.main(args);
                     break;
                 case 5:
+                    AES.main(args);
+                case 6:
                     System.out.println("Exiting...");
                     scan.close();
                     return;

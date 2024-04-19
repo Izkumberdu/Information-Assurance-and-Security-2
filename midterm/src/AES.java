@@ -105,12 +105,12 @@ public class AES {
 
         public static void encryptMenu(Scanner scan) {
                 System.out.println("Enter Text To Encrypt:");
-                String text = "Two One Nine Two";
-                // String text = scan.next();
+                // String text = "Two One Nine Two";
+                String text = scan.next();
                 System.out.println("Enter Decryption Key:");
-                // String key = scan.next();
+                String key = scan.next();
 
-                String key = "Thats my Kung Fu";
+                // String key = "Thats my Kung Fu";
                 String encryptedText = encryptECB(text, key);
                 System.out.println("Encrypted Text: " + encryptedText);
                 menu(scan);
@@ -118,11 +118,12 @@ public class AES {
 
         public static void decryptMenu(Scanner scan) {
                 System.out.println("Enter Text To decrypt:");
-                String text = "29c3505f571420f6402299b31a02d73a";
-                // String text = scan.next();
+                // String text = "29c3505f571420f6402299b31a02d73a";
+                String text = scan.next();
 
                 System.out.println("Enter Decryption Key:");
-                String key = "Thats my Kung Fu";
+                // String key = "Thats my Kung Fu";
+                String key = scan.next();
                 String decryptedText = decryptECB(text, key);
 
                 System.out.println("Decrypted Text: " + decryptedText);
