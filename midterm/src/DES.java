@@ -3,7 +3,6 @@ import java.util.Scanner;
 
 public class DES {
 
-    // Initial Permutation Table
     static final int[] initialPermutation = {
             58, 50, 42, 34, 26, 18, 10, 2,
             60, 52, 44, 36, 28, 20, 12, 4,
@@ -15,7 +14,7 @@ public class DES {
             63, 55, 47, 39, 31, 23, 15, 7
     };
 
-    // Final Permutation Table (Inverse of Initial Permutation)
+    // Inverse
     static final int[] finalPermutation = {
             40, 8, 48, 16, 56, 24, 64, 32,
             39, 7, 47, 15, 55, 23, 63, 31,
@@ -27,7 +26,6 @@ public class DES {
             33, 1, 41, 9, 49, 17, 57, 25
     };
 
-    // Expansion Permutation Table
     static final int[] expansionTable = {
             32, 1, 2, 3, 4, 5,
             4, 5, 6, 7, 8, 9,
@@ -39,7 +37,6 @@ public class DES {
             28, 29, 30, 31, 32, 1
     };
 
-    // S-Box Tables (additional S-Box tables)
     static final int[][][] sbox = {
             {
                     {14, 4, 13, 1, 2, 15, 11, 8, 3, 10, 6, 12, 5, 9, 0, 7},
@@ -91,7 +88,7 @@ public class DES {
             }
     };
 
-    // Initial Permutation for keys (key permu)
+    // key permu
     static final int[] pc1 = {
             57, 49, 41, 33, 25, 17, 9, 1,
             58, 50, 42, 34, 26, 18, 10, 2,
@@ -102,7 +99,7 @@ public class DES {
             29, 21, 13, 5, 28, 20, 12, 4
     };
 
-    // Key Compression Permutation Table (key comp)
+    // key comp
     static final int[] pc2 = {
             14, 17, 11, 24, 1, 5, 3, 28,
             15, 6, 21, 10, 23, 19, 12, 4,
@@ -112,13 +109,13 @@ public class DES {
             34, 53, 46, 42, 50, 36, 29, 32
     };
 
-    // Left Shifts for key schedule
+    // Left Shifts 
     static final int[] shiftBits = {
             1, 1, 2, 2, 2, 2, 2, 2,
             1, 2, 2, 2, 2, 2, 2, 1
     };
 
-    // permutation after sbox (plaintext)
+    // permutation after sbox 
     static final int[] permutationAfterSbox = {
             16, 7, 20, 21, 29, 12, 28, 17,
             1, 15, 23, 26, 5, 18, 31, 10,
@@ -153,7 +150,6 @@ public class DES {
         System.out.print("Enter hexadecimal key: ");
         String keyHex = scan.nextLine();
 
-        // Convert hexadecimal key to binary
         String keyBinary = hexToBin(keyHex);
 
         System.out.println("\nMessage to Encrypt: " + plaintext);
@@ -167,7 +163,6 @@ public class DES {
         System.out.print("Enter hexadecimal key: ");
         String keyHex = scan.nextLine();
 
-        // Convert hexadecimal key to binary
         String keyBinary = hexToBin(keyHex);
 
         String decryptedText = decrypt(ciphertext, keyBinary);
@@ -192,7 +187,7 @@ public class DES {
             int decimalValue = Integer.parseInt(binaryChar, 2);
             hexString.append(Integer.toHexString(decimalValue));
         }
-        return hexString.toString().toUpperCase(); // Convert to uppercase for consistency
+        return hexString.toString().toUpperCase(); // Convert to uppercase 
     }
 
 
@@ -236,7 +231,6 @@ public class DES {
     }
 
     public static String[] generateKeys(String key) {
-        // Ensure key length is exactly 8 characters (64 bits)
         key = String.format("%-8s", key).substring(0, 8);
     
         // Convert each character to its binary representation
@@ -262,7 +256,7 @@ public class DES {
         String[] keys = generateKeys(key);
         StringBuilder ciphertext = new StringBuilder();
     
-        // Convert plaintext to binary
+        // plaintext to binary
         StringBuilder plaintextBinary = new StringBuilder();
         for (char c : plaintext.toCharArray()) {
             plaintextBinary.append(String.format("%8s", Integer.toBinaryString(c)).replace(' ', '0'));
