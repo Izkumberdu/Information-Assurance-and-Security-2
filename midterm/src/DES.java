@@ -1,7 +1,7 @@
 // import java.util.Arrays;
 import java.util.Scanner;
 
-public class fk_des {
+public class DES {
 
     // Initial Permutation Table
     static final int[] initialPermutation = {
