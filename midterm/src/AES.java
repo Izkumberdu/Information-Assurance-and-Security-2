@@ -1,11 +1,9 @@
-import java.security.SecureRandom;
+
 import java.util.Scanner;
 
 public class AES {
-        private static final int nBytes = 4;
-        private static final int nRounds = 10;
 
-        private static final int[] Sbox = {
+        private static final int[] S_BOX = {
                         0x63, 0x7c, 0x77, 0x7b, 0xf2, 0x6b, 0x6f, 0xc5, 0x30, 0x01, 0x67, 0x2b, 0xfe, 0xd7, 0xab, 0x76,
                         0xca, 0x82, 0xc9, 0x7d, 0xfa, 0x59, 0x47, 0xf0, 0xad, 0xd4, 0xa2, 0xaf, 0x9c, 0xa4, 0x72, 0xc0,
                         0xb7, 0xfd, 0x93, 0x26, 0x36, 0x3f, 0xf7, 0xcc, 0x34, 0xa5, 0xe5, 0xf1, 0x71, 0xd8, 0x31, 0x15,
@@ -23,7 +21,7 @@ public class AES {
                         0xe1, 0xf8, 0x98, 0x11, 0x69, 0xd9, 0x8e, 0x94, 0x9b, 0x1e, 0x87, 0xe9, 0xce, 0x55, 0x28, 0xdf,
                         0x8c, 0xa1, 0x89, 0x0d, 0xbf, 0xe6, 0x42, 0x68, 0x41, 0x99, 0x2d, 0x0f, 0xb0, 0x54, 0xbb, 0x16
         };
-        private static final int[] SboxInverse = {
+        private static final int[] S_BOX_INVERSE = {
                         0x52, 0x09, 0x6a, 0xd5, 0x30, 0x36, 0xa5, 0x38, 0xbf, 0x40, 0xa3, 0x9e, 0x81, 0xf3, 0xd7, 0xfb,
                         0x7c, 0xe3, 0x39, 0x82, 0x9b, 0x2f, 0xff, 0x87, 0x34, 0x8e, 0x43, 0x44, 0xc4, 0xde, 0xe9, 0xcb,
                         0x54, 0x7b, 0x94, 0x32, 0xa6, 0xc2, 0x23, 0x3d, 0xee, 0x4c, 0x95, 0x0b, 0x42, 0xfa, 0xc3, 0x4e,
@@ -42,7 +40,7 @@ public class AES {
                         0x17, 0x2b, 0x04, 0x7e, 0xba, 0x77, 0xd6, 0x26, 0xe1, 0x69, 0x14, 0x63, 0x55, 0x21, 0x0c, 0x7d
         };
 
-        private static final int[][] roundConstant = {
+        private static final int[][] R_CON = {
                         { 0x00, 0x00, 0x00, 0x00 },
                         { 0x01, 0x00, 0x00, 0x00 },
                         { 0x02, 0x00, 0x00, 0x00 },
@@ -55,6 +53,8 @@ public class AES {
                         { 0x1b, 0x00, 0x00, 0x00 },
                         { 0x36, 0x00, 0x00, 0x00 }
         };
+        private static final int NUM_BYTES = 4;
+        private static final int NUM_ROUNDS = 10;
 
         public static void main(String[] args) {
                 System.out.println("--- Advanced Encryption Standard ----");
@@ -90,9 +90,8 @@ public class AES {
                 printByteArray(key);
 
                 int[][] expandedKey = keyExpansion(key);
-
-                int[] encryptedMessage = encrypt(plaintext, expandedKey);
                 System.out.println("--- Encryption ----");
+                int[] encryptedMessage = encrypt(plaintext, expandedKey);
 
                 System.out.println("Encrypted Message/Ciphertext:");
                 printByteArray(encryptedMessage);
@@ -118,8 +117,8 @@ public class AES {
                 byte[] bytes = plaintext.getBytes();
 
                 int length = bytes.length;
-                int numBlocks = (int) Math.ceil((double) length / (nBytes * 4));
-                int[] input = new int[nBytes * 4 * numBlocks];
+                int numBlocks = (int) Math.ceil((double) length / (NUM_BYTES * 4));
+                int[] input = new int[NUM_BYTES * 4 * numBlocks];
 
                 for (int i = 0; i < length; i++) {
                         input[i] = bytes[i] & 0xFF;
@@ -129,26 +128,26 @@ public class AES {
                         input[paddingIndex] = (byte) 0x00;
                 }
 
-                int[][] state = new int[4][nBytes];
+                int[][] state = new int[4][NUM_BYTES];
                 for (int block = 0; block < numBlocks; block++) {
-                        int blockOffset = block * 4 * nBytes;
-                        for (int i = 0; i < 4 * nBytes; i++) {
+                        int blockOffset = block * 4 * NUM_BYTES;
+                        for (int i = 0; i < 4 * NUM_BYTES; i++) {
                                 state[i % 4][i / 4] = input[blockOffset + i];
                         }
-                        state = addRoundKey(state, keySchedule, 0, nBytes);
+                        state = addRoundKey(state, keySchedule, 0, NUM_BYTES);
                         printStateAtRound(state, 0); // Print state after initial round key addition
-                        for (int round = 1; round < nRounds; round++) {
-                                state = subBytes(state, nBytes);
-                                state = shiftRows(state, nBytes);
-                                state = mixColumns(state, nBytes);
-                                state = addRoundKey(state, keySchedule, round, nBytes);
+                        for (int round = 1; round < NUM_ROUNDS; round++) {
+                                state = subBytes(state, NUM_BYTES);
+                                state = shiftRows(state, NUM_BYTES);
+                                state = mixColumns(state, NUM_BYTES);
+                                state = addRoundKey(state, keySchedule, round, NUM_BYTES);
                                 printStateAtRound(state, round); // Print state after each round
                         }
-                        state = subBytes(state, nBytes);
-                        state = shiftRows(state, nBytes);
-                        state = addRoundKey(state, keySchedule, nRounds, nBytes);
-                        printStateAtRound(state, nRounds); // Print state after final round
-                        for (int i = 0; i < 4 * nBytes; i++) {
+                        state = subBytes(state, NUM_BYTES);
+                        state = shiftRows(state, NUM_BYTES);
+                        state = addRoundKey(state, keySchedule, NUM_ROUNDS, NUM_BYTES);
+                        printStateAtRound(state, NUM_ROUNDS); // Print state after final round
+                        for (int i = 0; i < 4 * NUM_BYTES; i++) {
                                 input[blockOffset + i] = state[i % 4][i / 4];
                         }
                 }
@@ -156,33 +155,33 @@ public class AES {
         }
 
         public static String decrypt(int[] ciphertext, int[][] keySchedule) {
-                int[][] state = new int[4][nBytes];
-                for (int block = 0; block < ciphertext.length / (nBytes * 4); block++) {
-                        int blockOffset = block * 4 * nBytes;
-                        for (int i = 0; i < 4 * nBytes; i++) {
+                int[][] state = new int[4][NUM_BYTES];
+                for (int block = 0; block < ciphertext.length / (NUM_BYTES * 4); block++) {
+                        int blockOffset = block * 4 * NUM_BYTES;
+                        for (int i = 0; i < 4 * NUM_BYTES; i++) {
                                 state[i % 4][i / 4] = ciphertext[blockOffset + i];
                         }
-                        state = addRoundKey(state, keySchedule, nRounds, nBytes);
+                        state = addRoundKey(state, keySchedule, NUM_ROUNDS, NUM_BYTES);
                         printStateAtRound(state, 0); // Print state after initial round key addition
 
-                        for (int round = nRounds - 1; round > 0; round--) {
-                                state = shiftRowsInverse(state, nBytes);
-                                state = subBytesInverse(state, nBytes);
-                                state = addRoundKey(state, keySchedule, round, nBytes);
-                                state = mixColumnsInverse(state, nBytes);
-                                printStateAtRound(state, nRounds - round); // Print state after each round
+                        for (int round = NUM_ROUNDS - 1; round > 0; round--) {
+                                state = shiftRowsInverse(state, NUM_BYTES);
+                                state = subBytesInverse(state, NUM_BYTES);
+                                state = addRoundKey(state, keySchedule, round, NUM_BYTES);
+                                state = mixColumnsInverse(state, NUM_BYTES);
+                                printStateAtRound(state, NUM_ROUNDS - round); // Print state after each round
                         }
 
-                        state = shiftRowsInverse(state, nBytes);
-                        state = subBytesInverse(state, nBytes);
-                        state = addRoundKey(state, keySchedule, 0, nBytes);
-                        printStateAtRound(state, nRounds);
-                        int[] decryptedBlock = new int[4 * nBytes];
-                        for (int i = 0; i < 4 * nBytes; i++) {
+                        state = shiftRowsInverse(state, NUM_BYTES);
+                        state = subBytesInverse(state, NUM_BYTES);
+                        state = addRoundKey(state, keySchedule, 0, NUM_BYTES);
+                        printStateAtRound(state, NUM_ROUNDS);
+                        int[] decryptedBlock = new int[4 * NUM_BYTES];
+                        for (int i = 0; i < 4 * NUM_BYTES; i++) {
                                 decryptedBlock[i] = state[i % 4][i / 4];
                         }
 
-                        for (int i = 0; i < 4 * nBytes; i++) {
+                        for (int i = 0; i < 4 * NUM_BYTES; i++) {
                                 ciphertext[blockOffset + i] = decryptedBlock[i];
                         }
                 }
@@ -215,8 +214,8 @@ public class AES {
         public static int[][] keyExpansion(int[] key) {
 
                 int nKeys = key.length / 4;
-                int nRounds = nKeys + 6;
-                int[][] keySchedule = new int[nBytes * (nRounds + 1)][4];
+                int NUM_ROUNDS = nKeys + 6;
+                int[][] keySchedule = new int[NUM_BYTES * (NUM_ROUNDS + 1)][4];
                 int[] temp = new int[4];
 
                 // Copy the initial key to the key schedule
@@ -227,7 +226,7 @@ public class AES {
                         keySchedule[currentKeyIndex] = row;
                 }
 
-                for (int currentKeyIndex = nKeys; currentKeyIndex < (nBytes * (nRounds + 1)); currentKeyIndex++) {
+                for (int currentKeyIndex = nKeys; currentKeyIndex < (NUM_BYTES * (NUM_ROUNDS + 1)); currentKeyIndex++) {
                         keySchedule[currentKeyIndex] = new int[4];
                         for (int currentColIndex = 0; currentColIndex < 4; currentColIndex++) {
                                 temp[currentColIndex] = keySchedule[currentKeyIndex - 1][currentColIndex];
@@ -236,7 +235,7 @@ public class AES {
                         if (currentKeyIndex % nKeys == 0) {
                                 temp = subWord(rotWord(temp));
                                 for (int currentColIndex = 0; currentColIndex < 4; currentColIndex++) {
-                                        temp[currentColIndex] ^= roundConstant[currentKeyIndex
+                                        temp[currentColIndex] ^= R_CON[currentKeyIndex
                                                         / nKeys][currentColIndex];
                                 }
                         }
@@ -264,16 +263,16 @@ public class AES {
 
         private static int[] subWord(int[] word) {
                 for (int index = 0; index < 4; index++) {
-                        word[index] = Sbox[word[index]];
+                        word[index] = S_BOX[word[index]];
                 }
                 return word;
         }
 
-        private static int[][] addRoundKey(int[][] state, int[][] expandedKey, int rnd, int nBytes) {
+        private static int[][] addRoundKey(int[][] state, int[][] expandedKey, int rnd, int NUM_BYTES) {
 
-                for (int col = 0; col < nBytes; col++) {
+                for (int col = 0; col < NUM_BYTES; col++) {
                         for (int row = 0; row < 4; row++) {
-                                int expandedKeyIndex = rnd * nBytes + col;
+                                int expandedKeyIndex = rnd * NUM_BYTES + col;
 
                                 if (expandedKeyIndex < expandedKey.length
                                                 && row < expandedKey[expandedKeyIndex].length) {
@@ -286,22 +285,22 @@ public class AES {
                 return state;
         }
 
-        private static int[][] subBytes(int[][] state, int nBytes) {
+        private static int[][] subBytes(int[][] state, int NUM_BYTES) {
 
                 for (int row = 0; row < 4; row++) {
-                        for (int col = 0; col < nBytes; col++) {
-                                state[row][col] = Sbox[state[row][col]];
+                        for (int col = 0; col < NUM_BYTES; col++) {
+                                state[row][col] = S_BOX[state[row][col]];
                         }
                 }
                 return state;
         }
 
-        private static int[][] shiftRows(int[][] state, int nBytes) {
+        private static int[][] shiftRows(int[][] state, int NUM_BYTES) {
 
                 int[] tempRow = new int[4];
                 for (int row = 1; row < 4; row++) {
                         for (int col = 0; col < 4; col++) {
-                                tempRow[col] = state[row][(col + row) % nBytes];
+                                tempRow[col] = state[row][(col + row) % NUM_BYTES];
                         }
                         for (int col = 0; col < 4; col++) {
                                 state[row][col] = tempRow[col];
@@ -311,7 +310,7 @@ public class AES {
                 return state;
         }
 
-        private static int[][] mixColumns(int[][] state, int nBytes) {
+        private static int[][] mixColumns(int[][] state, int NUM_BYTES) {
 
                 for (int col = 0; col < 4; col++) {
                         int s0 = state[0][col];
@@ -344,23 +343,23 @@ public class AES {
                 return result & 0xFF;
         }
 
-        private static int[][] subBytesInverse(int[][] state, int nBytes) {
+        private static int[][] subBytesInverse(int[][] state, int NUM_BYTES) {
 
                 for (int row = 0; row < 4; row++) {
-                        for (int col = 0; col < nBytes; col++) {
-                                state[row][col] = SboxInverse[state[row][col]];
+                        for (int col = 0; col < NUM_BYTES; col++) {
+                                state[row][col] = S_BOX_INVERSE[state[row][col]];
                         }
                 }
 
                 return state;
         }
 
-        private static int[][] shiftRowsInverse(int[][] state, int nBytes) {
+        private static int[][] shiftRowsInverse(int[][] state, int NUM_BYTES) {
 
                 int[] tempRow = new int[4];
                 for (int row = 1; row < 4; row++) {
                         for (int col = 0; col < 4; col++) {
-                                tempRow[col] = state[row][(col - row + 4) % nBytes];
+                                tempRow[col] = state[row][(col - row + 4) % NUM_BYTES];
                         }
                         for (int col = 0; col < 4; col++) {
                                 state[row][col] = tempRow[col];
@@ -370,7 +369,7 @@ public class AES {
                 return state;
         }
 
-        private static int[][] mixColumnsInverse(int[][] state, int nBytes) {
+        private static int[][] mixColumnsInverse(int[][] state, int NUM_BYTES) {
 
                 for (int col = 0; col < 4; col++) {
                         int s0 = state[0][col];
@@ -394,7 +393,7 @@ public class AES {
         public static void printStateAtRound(int[][] state, int round) {
                 System.out.println("State at Round " + round + ":");
                 for (int row = 0; row < 4; row++) {
-                        for (int col = 0; col < nBytes; col++) {
+                        for (int col = 0; col < NUM_BYTES; col++) {
                                 System.out.printf("%02x ", state[row][col]);
                         }
                         System.out.println();
