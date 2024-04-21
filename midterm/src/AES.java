@@ -57,26 +57,48 @@ public class AES {
         };
 
         public static void main(String[] args) {
+                System.out.println("--- Advanced Encryption Standard ----");
                 Scanner scanner = new Scanner(System.in);
 
                 System.out.println("Enter plaintext:");
                 String plaintext = scanner.nextLine();
 
-                // Generate a random key
-                int[] key = { 84, 104, 97, 116, 115, 32, 109, 121, 32, 75, 117, 110, 103, 32, 70, 117 };
+                System.out.println("Enter key:");
+                String keyString = scanner.nextLine();
 
-                System.out.println("Randomly Generated Key:");
+                boolean isHexFormat = keyString.matches("[0-9a-fA-F]+");
+
+                // Convert the key to an integer array
+                int[] key;
+                if (isHexFormat) {
+                        // Convert hex string to bytes
+                        byte[] keyBytes = hexStringToBytes(keyString);
+                        // Convert bytes to integers
+                        key = new int[keyBytes.length];
+                        for (int i = 0; i < keyBytes.length; i++) {
+                                key[i] = keyBytes[i] & 0xFF; // Convert byte to unsigned int
+                        }
+                } else {
+
+                        key = new int[keyString.length()];
+                        for (int i = 0; i < keyString.length(); i++) {
+                                key[i] = keyString.charAt(i);
+                        }
+                }
+
+                System.out.println("Key:");
                 printByteArray(key);
 
                 int[][] expandedKey = keyExpansion(key);
 
                 int[] encryptedMessage = encrypt(plaintext, expandedKey);
+                System.out.println("--- Encryption ----");
 
                 System.out.println("Encrypted Message/Ciphertext:");
                 printByteArray(encryptedMessage);
 
                 String decryptedMessage = decrypt(encryptedMessage, expandedKey);
-
+                System.out.println("--- Decryption ----");
                 // Print the resulting plaintext
                 System.out.println("Decrypted Message/Plaintext:");
                 System.out.println(decryptedMessage);
@@ -257,9 +279,6 @@ public class AES {
                                                 && row < expandedKey[expandedKeyIndex].length) {
                                         state[row][col] ^= expandedKey[expandedKeyIndex][row];
 
-                                } else {
-                                        throw new ArrayIndexOutOfBoundsException(
-                                                        "Index out of bounds in expandedKey array");
                                 }
                         }
                 }
@@ -381,5 +400,15 @@ public class AES {
                         System.out.println();
                 }
                 System.out.println();
+        }
+
+        private static byte[] hexStringToBytes(String hexString) {
+                int len = hexString.length();
+                byte[] data = new byte[len / 2];
+                for (int i = 0; i < len; i += 2) {
+                        data[i / 2] = (byte) ((Character.digit(hexString.charAt(i), 16) << 4)
+                                        + Character.digit(hexString.charAt(i + 1), 16));
+                }
+                return data;
         }
 }
