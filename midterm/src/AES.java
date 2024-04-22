@@ -135,18 +135,18 @@ public class AES {
                                 state[i % 4][i / 4] = input[blockOffset + i];
                         }
                         state = addRoundKey(state, keySchedule, 0, NUM_BYTES);
-                        printStateAtRound(state, 0); // Print state after initial round key addition
+                        printStateAtRound(state, 0);
                         for (int round = 1; round < NUM_ROUNDS; round++) {
                                 state = subBytes(state, NUM_BYTES);
                                 state = shiftRows(state, NUM_BYTES);
                                 state = mixColumns(state, NUM_BYTES);
                                 state = addRoundKey(state, keySchedule, round, NUM_BYTES);
-                                printStateAtRound(state, round); // Print state after each round
+                                printStateAtRound(state, round);
                         }
                         state = subBytes(state, NUM_BYTES);
                         state = shiftRows(state, NUM_BYTES);
                         state = addRoundKey(state, keySchedule, NUM_ROUNDS, NUM_BYTES);
-                        printStateAtRound(state, NUM_ROUNDS); // Print state after final round
+                        printStateAtRound(state, NUM_ROUNDS);
                         for (int i = 0; i < 4 * NUM_BYTES; i++) {
                                 input[blockOffset + i] = state[i % 4][i / 4];
                         }
@@ -207,9 +207,6 @@ public class AES {
 
                 return plaintext.toString();
         }
-
-        // Other AES methods: keyExpansion, subBytes, shiftRows, mixColumns, etc.
-        // ...
 
         public static int[][] keyExpansion(int[] key) {
 

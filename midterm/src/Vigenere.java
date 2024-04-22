@@ -31,20 +31,33 @@ public class Vigenere {
 
     private static void Encrypt(Scanner scan) {
         System.out.print("Input Text to Encrypt: ");
-        String text = scan.next().toUpperCase();
-        text.toCharArray();
-        System.out.println(text);
+        scan.nextLine();
+        String inputText = scan.nextLine();
+        inputText = inputText.toUpperCase();
+        char[] text = inputText.toCharArray();
+        StringBuilder textWithoutWhitespace = new StringBuilder();
+
+        // Loop to iterate over each character and skip whitespaces
+        for (char c : text) {
+            if (!Character.isWhitespace(c)) {
+                textWithoutWhitespace.append(c);
+            }
+        }
+
+        String textString = textWithoutWhitespace.toString();
+        System.out.println("Text without Whitespace: " + textString);
 
         System.out.print("Input key of the Encryption: ");
         String key = scan.next();
 
-        if (text.length() != key.length()) {
-            key = KeyRepeat(key, text);
+        if (textString.length() != key.length()) {
+            key = KeyRepeat(key, textString);
         }
+
         StringBuilder encryptedMessage = new StringBuilder();
 
-        for (int i = 0; i < text.length(); i++) {
-            char currentChar = text.charAt(i);
+        for (int i = 0; i < textString.length(); i++) {
+            char currentChar = textString.charAt(i);
             char keyChar = key.charAt(i);
             if (Character.isUpperCase(currentChar)) {
                 char encryptedChar = (char) ((currentChar + keyChar - 2 * 'A') % 26 + 'A');
@@ -79,12 +92,6 @@ public class Vigenere {
         }
 
         System.out.println("Encrypted Message: " + decryptedMessage);
-    }
-
-    private static String removedWhiteSpace(String text) {
-        String editedText = text.replaceAll("\\s", "");
-        System.out.println(editedText);
-        return editedText;
     }
 
     private static String KeyRepeat(String key, String text) {
