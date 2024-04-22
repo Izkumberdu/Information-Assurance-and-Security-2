@@ -120,6 +120,7 @@ public class AES {
                 int numBlocks = (int) Math.ceil((double) length / (NUM_BYTES * 4));
                 int[] input = new int[NUM_BYTES * 4 * numBlocks];
 
+                // Convert to integer for padding purposes.
                 for (int i = 0; i < length; i++) {
                         input[i] = bytes[i] & 0xFF;
                 }
